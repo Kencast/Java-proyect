@@ -1,12 +1,19 @@
 package com.mycompany.proyecto1;
 
-public class Ficha {
+public abstract class  Ficha {
     private char color; //ponemos la incial del color para identificarlo
     private int num;
+    private int index;
 
-    Ficha(int num,char color){
+    public Ficha(){
+        setColor(' ');
+        setNum(0);
+        setIndex(0);
+    }
+    public Ficha(int num,char color){
         setColor(color);
         setNum(num);
+        setIndex(0);
     }
 
     public void setColor(char color) {
@@ -22,5 +29,14 @@ public class Ficha {
     public int getNum() {
         return num;
     }
+
+    public int getIndex() {
+        return index;
+    }
+    public void setIndex(int index) {
+        this.index = index;
+    }
+    
+    
 }
 
