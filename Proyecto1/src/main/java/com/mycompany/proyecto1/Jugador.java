@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package com.mycompany.proyecto1;
 
 /**
@@ -28,7 +25,7 @@ public class Jugador {
     }
     
     public void tomarNuevaFicha(Baraja fichas){//saca una ficha y
-        atril.insertar(fichas.sacar()); //la mete en la baraja
+        atril.insertar(fichas.sacar()); //la mete en el soporte
     }
     
     public void sacarFicha(int index){
