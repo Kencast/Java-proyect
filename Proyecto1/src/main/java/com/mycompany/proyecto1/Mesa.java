@@ -3,14 +3,14 @@ package com.mycompany.proyecto1;
 import java.util.ArrayList;
 
 public class Mesa {
-    private ArrayList<Serie> grupos;
+    private ArrayList<Combinaciones> grupos;
     
     public Mesa(){
         setGrupos();
     }
     
     private void setGrupos(){
-        grupos = new ArrayList<Serie>();
+        grupos = new ArrayList<Combinaciones>();
     }
     
     public boolean verificarGrupos(){

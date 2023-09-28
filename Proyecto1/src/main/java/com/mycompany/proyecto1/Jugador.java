@@ -19,9 +19,12 @@ public class Jugador {
     public int getPuntajeTotal() {
         return puntajeTotal;
     }
-
     public void setPuntajeTotal(int puntajeTotal) {
         this.puntajeTotal = puntajeTotal;
+    }
+
+    public int cantFichas(){
+        return atril.getCantidad();
     }
 
     public boolean isPuedeModificar() {
