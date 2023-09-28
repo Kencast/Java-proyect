@@ -5,13 +5,13 @@ import java.util.ArrayList;
 public class Combinaciones {
     private ArrayList<Ficha> grupo;
     private boolean escalera;
-    private boolean combinacion;
+    private boolean serie;
     
     public Combinaciones(Ficha ficha){
         setCombinacion(ficha);
     }
  
-    private void setSerie(Ficha ficha){
+    private void setCombinacion(Ficha ficha){
         //Inicializa una serie
         grupo = new ArrayList<Ficha>();
         insertar(ficha);
@@ -41,37 +41,52 @@ public class Combinaciones {
         esEscalera(0);
         if(getEscalera()) {return true;}
         if(getTamaño() > 4){return false;}
-        esCombinacion(0);
-        return getCombinacion();
+        esSerie(0);
+        return getSerie();
     }
     
-    private void esEscalera(int ind){
-        if(ind+1 == getTamaño()){setEscalera(true);}
-        else if(grupo.get(ind).getNum() == grupo.get(ind+1).getNum()-1){
-            esEscalera(ind+1);
+    private void esEscalera(int ind) {
+        //Verifica si el grupo es una escalera
+        if (ind + 1 == getTamaño()) {
+            setEscalera(true);
+        } else {
+            if (grupo.get(ind) instanceof Comodin) {
+                grupo.get(ind).setNum(grupo.get(ind + 1).getNum() - 1);
+            }
+            if (grupo.get(ind).getNum() == grupo.get(ind + 1).getNum() - 1 &&
+                    grupo.get(ind).getColor() == grupo.get(ind + 1).getColor()) {
+                esEscalera(ind + 1);
+            } else setEscalera(false);
         }
-        else setEscalera(false);
     }
 
     public boolean getEscalera() {
         return escalera;
     }
+
     public void setEscalera(boolean escalera) {
         this.escalera = escalera;
     }
 
-    public boolean getCombinacion() {
-        return combinacion;
+    public boolean getSerie() {
+        return serie;
     }
-    public void setCombinacion(boolean combinacion) {
-        this.combinacion = combinacion;
-    }
+
+    public void setSerie(boolean serie) {this.serie = serie;}
     
-    private void esCombinacion(int ind){
-        if(ind+1 == getTamaño()){setCombinacion(true);}
-        else if(grupo.get(ind).getNum() == grupo.get(ind+1).getNum()){
-            esCombinacion(ind+1);
+    private void esSerie(int ind) {
+       // Verifica si el grupo es una serie
+        if(ind+1 == getTamaño()) {
+            setSerie(true);
         }
-        else setCombinacion(false);
+        else {
+            if (grupo.get(ind) instanceof Comodin) {
+                grupo.get(ind).setNum(grupo.get(ind + 1).getNum());
+            }
+            if (grupo.get(ind).getNum() == grupo.get(ind + 1).getNum() &&
+                    grupo.get(ind).getColor() != grupo.get(ind + 1).getColor()) {
+                esSerie(ind + 1);
+            } else setSerie(false);
+        }
     }
 }
