@@ -19,7 +19,15 @@ public class Mesa {
         }
         return true;
     }
-    
+
+    public void generargrupo(Ficha ficha){ //(Joshua) para el antepenúltimo método de la clase jugador
+        grupos.add(Combinaciones(Ficha ficha));
+    }
+
+    public Combinaciones sacargrupo(int index){ //(Joshua) para el penúltimo método de la clase jugador
+        return grupos.get(index);
+    }
+
     public int getTamaño(){
         return grupos.size();
     }

@@ -1,6 +1,4 @@
-
 package com.mycompany.proyecto1;
-
 /**
  *
  * @author kencast
@@ -37,10 +35,10 @@ public class Jugador {
     public void setAtril(Baraja fichasIniciales){
         atril= new Soporte(fichasIniciales);
     }
+
     public int getPuntos() {
         return puntos;
     }
-
     public void setPuntos(int puntos) {
         this.puntos = puntos;
     }
@@ -56,12 +54,17 @@ public class Jugador {
 
     public void crearCombinación(Mesa grupos, Ficha elegida){
         //crear un nuevo grupo en la Mesa y meter esta ficha
+        grupos.generargrupo(elegida); //(Joshua) simplemente utilizar el método que creé en la clase crearCombinación
     }
 
     public void meterEnCombinacion(Mesa grupos, Ficha n, int grupo){
         //meter la ficha 'n' en el grupo 'i'
+        grupos.sacargrupo(grupo).insertar(n); //(Joshua) creé el método sacar grupo para poder a un grupo específico de la mesa, insertarle la ficha.
     }
     public Ficha fichaEnMesa(Mesa grupos, int grupo, int elemento){
         //si puedoModificar es true sacar la ficha de la mesa
+        if(isPuedeModificar()){  //(Joshua) esta no le entiendo bien lo que estaba pensando a la hora de hacerlo
+            grupos.sacargrupo(grupo).eliminar(elemento);
+        }
     }
 }
