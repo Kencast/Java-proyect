@@ -50,7 +50,7 @@ public class Partida {
         int index=getTurnoActual()-1;
         turno(jugadores[index]);
     }
-    private boolean verificarJugadas(Jugador actual){
+    private void verificarJugadas(Jugador actual){ //boolean
         //verificar las jugadas de la mesa
         //retornar false si están mal o true en caso contrario
     }

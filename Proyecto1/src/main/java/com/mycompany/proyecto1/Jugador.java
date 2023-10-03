@@ -61,7 +61,7 @@ public class Jugador {
         //meter la ficha 'n' en el grupo 'i'
         grupos.sacargrupo(grupo).insertar(n); //(Joshua) creé el método sacar grupo para poder a un grupo específico de la mesa, insertarle la ficha.
     }
-    public Ficha fichaEnMesa(Mesa grupos, int grupo, int elemento){
+    public void fichaEnMesa(Mesa grupos, int grupo, int elemento){ //return Ficha
         //si puedoModificar es true sacar la ficha de la mesa
         if(isPuedeModificar()){  //(Joshua) esta no le entiendo bien lo que estaba pensando a la hora de hacerlo
             grupos.sacargrupo(grupo).eliminar(elemento);

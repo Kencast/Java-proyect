@@ -21,7 +21,7 @@ public class Mesa {
     }
 
     public void generargrupo(Ficha ficha){ //(Joshua) para el antepenúltimo método de la clase jugador
-        grupos.add(Combinaciones(Ficha ficha));
+        //grupos.add(ficha);
     }
 
     public Combinaciones sacargrupo(int index){ //(Joshua) para el penúltimo método de la clase jugador
