@@ -59,8 +59,8 @@ public class Partida {
 
     }
 
-    public void turno(Jugador jugador){
-        int fichasInicial=jugador.cantFichas();
+    public void turno(Jugador jugador){ //clase incompleta 
+        int fichasInicial=jugador.cantFichas(); //donde seteó la cantidad de fichas?
 
     }
 
