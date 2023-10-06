@@ -1,7 +1,7 @@
 package com.mycompany.proyecto1;
 
 public class Soporte {
-    private Ficha atril [];
+    private Ficha atril[];
     private int cantidad;
     
     public Soporte(Baraja mazo){
@@ -45,11 +45,11 @@ public class Soporte {
     
     private int ubicar(Ficha ficha){
         //Da un valor para colocar la ficha en el lugar correcto
-        char color = ficha.getColor();
+        int color = ficha.getColor();
         int num = ficha.getNum();
-        if(color == 'a'){return num;}
-        if(color == 'r'){return num + 26;}
-        if(color == 'n'){return num + 52;}
+        if(color == 0){return num;}
+        if(color == 1){return num + 26;}
+        if(color == 2){return num + 52;}
         else return num + 78;
     }
     
@@ -81,9 +81,20 @@ public class Soporte {
         atril[index] = null;
         return ficha;
     }
+
+    public Ficha consultarFicha(int pos){
+        int cuenta = 0;
+        for(int i = 0; i < 106; i++){
+            if(atril[i] != null){
+                if(cuenta == pos){return atril[i];}
+                else{cuenta++;}
+            }
+        }
+        return null;
+    }
 }
-// 1 26 azul
-// 27 52 roja
-// 53 78 negro
-// 79 104 yellow
-// 105 106 comodines
+// 1 26 azul 0
+// 27 52 roja 1
+// 53 78 negro 2 
+// 79 104 yellow 3 
+// 105 106 comodines 4

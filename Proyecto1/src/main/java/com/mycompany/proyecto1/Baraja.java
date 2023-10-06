@@ -5,6 +5,7 @@ import java.util.Random;
 
 public class Baraja {
     private ArrayList<Ficha> fichasMesa;
+
     public Baraja(){
         generarBaraja();
     }
@@ -14,10 +15,10 @@ public class Baraja {
         fichasMesa = new ArrayList<Ficha>();
         for(int i = 0; i < 2; i++){
             for(int j = 1; j <= 13; j++){
-                Ficha fa = new FichaNormal(j,'a');
-                Ficha fn = new FichaNormal(j,'n');
-                Ficha fr = new FichaNormal(j,'r');
-                Ficha fy = new FichaNormal(j,'y');
+                Ficha fa = new FichaNormal(j,0);
+                Ficha fn = new FichaNormal(j,1);
+                Ficha fr = new FichaNormal(j,2);
+                Ficha fy = new FichaNormal(j,3);
                 fichasMesa.add(fa);
                 fichasMesa.add(fr);
                 fichasMesa.add(fn);

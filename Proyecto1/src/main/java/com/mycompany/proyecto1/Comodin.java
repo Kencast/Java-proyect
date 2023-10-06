@@ -7,7 +7,7 @@ public class Comodin extends Ficha{
         setValor(30);
     }
     
-    public Comodin(int num, char color){
+    public Comodin(int num, int color){
         super(num, color);
         setValor(30);
     }

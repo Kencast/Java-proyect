@@ -47,22 +47,9 @@
         </constraints>
         <properties>
           <background color="-262145"/>
-          <font size="14" style="1"/>
+          <font name="OpenSymbol" size="18" style="1"/>
           <foreground color="-16777216"/>
           <text value="Empezar Partida"/>
-        </properties>
-      </component>
-      <component id="ec35a" class="javax.swing.JButton" binding="salirButton" default-binding="true">
-        <constraints>
-          <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-          <gridbag weightx="0.0" weighty="0.0"/>
-        </constraints>
-        <properties>
-          <background color="-12580853"/>
-          <enabled value="true"/>
-          <font size="14" style="1"/>
-          <foreground color="-16777216"/>
-          <text value="Salir"/>
         </properties>
       </component>
       <component id="7f28e" class="javax.swing.JLabel">
@@ -72,6 +59,18 @@
         </constraints>
         <properties>
           <text value="     "/>
+        </properties>
+      </component>
+      <component id="d5977" class="javax.swing.JButton" binding="salirBoton">
+        <constraints>
+          <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <gridbag weightx="0.0" weighty="0.0"/>
+        </constraints>
+        <properties>
+          <background color="-9961461"/>
+          <font name="OpenSymbol" size="18" style="1"/>
+          <foreground color="-1645074"/>
+          <text value="Salir"/>
         </properties>
       </component>
     </children>

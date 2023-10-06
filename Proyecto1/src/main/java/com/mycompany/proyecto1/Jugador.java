@@ -67,4 +67,9 @@ public class Jugador {
             grupos.sacargrupo(grupo).eliminar(elemento);
         }
     }
+    
+    public Ficha consultarFichaSoporte(int pos){
+        return atril.consultarFicha(pos);
+    }
+
 }

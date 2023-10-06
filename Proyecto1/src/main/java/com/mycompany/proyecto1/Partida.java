@@ -3,14 +3,18 @@ package com.mycompany.proyecto1;
 public class Partida {
     private Jugador jugadores[];
     private int rondas; //número de la ronda actual
-    private int turnoActual; //número del juegador para el turno
+    private int turnoActual; //número del jugador para el turno
     private Mesa tablero;
     private Baraja fichas;
 
     public Partida(){
-        jugadores=new Jugador[4];
-        tablero=new Mesa();
         fichas=new Baraja();
+        jugadores=new Jugador[4];
+        jugadores[0] = new Jugador(fichas);
+        jugadores[1] = new Jugador(fichas);
+        jugadores[2] = new Jugador(fichas);
+        jugadores[3] = new Jugador(fichas);
+        tablero=new Mesa();
     }
 
     public int getTurnoActual() {
@@ -31,14 +35,12 @@ public class Partida {
 
     public void empezarPartida(){
         setRondas(1);
-        setTurnoActual(1);
-        turno(jugadores[0]); //empieza el primer turno de la ronda
+        setTurnoActual(0);
     }
 
     public void siguienteRonda(){
         aumentarRonda();
         setTurnoActual(1);
-        turno(jugadores[0]);
     }
 
     private void aumentarTurno(){
@@ -47,7 +49,7 @@ public class Partida {
     }
     private void cambiarTurno(){ //pasa al turno del siguiente jugador
         aumentarTurno();
-        int index=getTurnoActual()-1;
+        int index=getTurnoActual();
         turno(jugadores[index]);
     }
     private void verificarJugadas(Jugador actual){ //boolean
@@ -71,5 +73,7 @@ public class Partida {
         }
     }
 
-
+    public Jugador actualJugador(){
+        return jugadores[getTurnoActual()];
+    }
 }
