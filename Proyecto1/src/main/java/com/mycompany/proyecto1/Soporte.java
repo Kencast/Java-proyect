@@ -5,7 +5,7 @@ public class Soporte {
     private int cantidad;
     
     public Soporte(Baraja mazo){
-        cantidad = 0;
+        setCantidad(0);;
         setAtril(mazo);
     }
     
@@ -79,6 +79,7 @@ public class Soporte {
         //Saca una ficha del atril
         Ficha ficha = atril[index];
         atril[index] = null;
+        cantidad--;
         return ficha;
     }
 
@@ -92,6 +93,11 @@ public class Soporte {
         }
         return null;
     }
+
+    public Ficha fichaIndex(int index){
+        return atril[index];
+    }
+
 }
 // 1 26 azul 0
 // 27 52 roja 1

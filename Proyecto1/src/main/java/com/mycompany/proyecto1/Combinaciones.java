@@ -7,19 +7,18 @@ public class Combinaciones {
     private boolean escalera;
     private boolean serie;
     
-    public Combinaciones(Ficha ficha){
-        setCombinacion(ficha);
+    public Combinaciones(){
+        setCombinacion();
     }
  
-    private void setCombinacion(Ficha ficha){
+    private void setCombinacion(){
         //Inicializa una serie
         grupo = new ArrayList<Ficha>();
-        insertar(ficha);
     }
     
     public void insertar(Ficha ficha){
         //Inserta una ficha al final
-        ficha.setIndex(getTamaño());
+        ficha.setIndex(getTamaño() - 1);
         grupo.add(ficha);
     }
     

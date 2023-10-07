@@ -72,4 +72,13 @@ public class Jugador {
         return atril.consultarFicha(pos);
     }
 
+    public Ficha pedirFichaSoporte(int index){
+        return atril.fichaIndex(index);
+    }
+
+    public void regresarFichaSoporte(Ficha f){
+        setPuntos(getPuntos()-f.getNum()); //verificar con comodin
+        atril.insertar(f);
+    }
+
 }
