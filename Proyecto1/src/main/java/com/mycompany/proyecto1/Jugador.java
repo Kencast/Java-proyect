@@ -2,15 +2,19 @@ package com.mycompany.proyecto1;
 /**
  *
  * @author kencast
+ * @author Tupadre
  */
 public class Jugador {
     private Soporte atril;
     private int puntajeTotal;
     private int puntos;
     private boolean puedeModificar;
+    private Soporte copia;
 
     public Jugador(Baraja fichasIniciales){
         setAtril(fichasIniciales);
+        setPuntajeTotal(0);
+        setPuntos(0);
         setPuedeModificar(false);
     }
 
@@ -19,6 +23,10 @@ public class Jugador {
     }
     public void setPuntajeTotal(int puntajeTotal) {
         this.puntajeTotal = puntajeTotal;
+    }
+
+    public void sumarPuntajeTotal(int puntos) {
+        puntajeTotal+=puntos;
     }
 
     public int cantFichas(){
@@ -48,26 +56,11 @@ public class Jugador {
     }
     
     public void sacarFicha(int index){ //Saca ficha 'i' del soporte
-        Ficha elegida=atril.sacar(index);
+        Ficha elegida=atril.obtenerFicha(index);
+        atril.sacar(index);
         puntos+=elegida.getNum();
     }
 
-    public void crearCombinación(Mesa grupos, Ficha elegida){
-        //crear un nuevo grupo en la Mesa y meter esta ficha
-        grupos.generargrupo(elegida); //(Joshua) simplemente utilizar el método que creé en la clase crearCombinación
-    }
-
-    public void meterEnCombinacion(Mesa grupos, Ficha n, int grupo){
-        //meter la ficha 'n' en el grupo 'i'
-        grupos.sacargrupo(grupo).insertar(n); //(Joshua) creé el método sacar grupo para poder a un grupo específico de la mesa, insertarle la ficha.
-    }
-    public void fichaEnMesa(Mesa grupos, int grupo, int elemento){ //return Ficha
-        //si puedoModificar es true sacar la ficha de la mesa
-        if(isPuedeModificar()){  //(Joshua) esta no le entiendo bien lo que estaba pensando a la hora de hacerlo
-            grupos.sacargrupo(grupo).eliminar(elemento);
-        }
-    }
-    
     public Ficha consultarFichaSoporte(int pos){
         return atril.consultarFicha(pos);
     }
@@ -77,8 +70,26 @@ public class Jugador {
     }
 
     public void regresarFichaSoporte(Ficha f){
-        setPuntos(getPuntos()-f.getNum()); //verificar con comodin
+        setPuntos(getPuntos()-f.getNum());
         atril.insertar(f);
     }
 
+    public void respaldarSoporte(){
+        copia = atril.copiar();
+    }
+
+    public void sumarSoporte(){
+        puntos=atril.sumarpuntosoporte();
+    }
+
+    public void reemplazarSoporte(){
+        atril.reemplazar(copia);
+    }
+
+    public void resetearSoporte(Baraja mazo){
+        atril = new Soporte(mazo);
+    }
+
 }
+
+

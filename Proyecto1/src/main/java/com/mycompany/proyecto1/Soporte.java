@@ -3,9 +3,15 @@ package com.mycompany.proyecto1;
 public class Soporte {
     private Ficha atril[];
     private int cantidad;
-    
+
+    public Soporte(){
+        this.atril = new Ficha[107];
+        vaciar();
+        setCantidad(0);
+    }
+
     public Soporte(Baraja mazo){
-        setCantidad(0);;
+        setCantidad(0);
         setAtril(mazo);
     }
     
@@ -55,7 +61,7 @@ public class Soporte {
     
     private void vaciar(){
         //Vacia el atril
-        for(int i = 0; i < 105; i++){atril[i] = null;}
+        for(int i = 0; i < 107; i++){atril[i] = null;}
     }
     
     public void insertar(Ficha ficha){
@@ -68,24 +74,27 @@ public class Soporte {
         setCantidad(getCantidad()+1);
     }
 
-    public int getCantidad() {
+    public int getCantidad(){
         return cantidad;
     }
     private void setCantidad(int cantidad){
         this.cantidad = cantidad;
     }
 
-    public Ficha sacar(int index){
+    public void sacar(int index){
         //Saca una ficha del atril
-        Ficha ficha = atril[index];
         atril[index] = null;
         cantidad--;
-        return ficha;
+    }
+
+    public Ficha obtenerFicha(int index){
+        //Da la ficha en la posicion index
+        return atril[index];
     }
 
     public Ficha consultarFicha(int pos){
         int cuenta = 0;
-        for(int i = 0; i < 106; i++){
+        for(int i = 0; i < 107; i++){
             if(atril[i] != null){
                 if(cuenta == pos){return atril[i];}
                 else{cuenta++;}
@@ -94,8 +103,36 @@ public class Soporte {
         return null;
     }
 
+    public int sumarpuntosoporte(){
+        int sum=0;
+        for(int i=1;i<107;i++){
+            if(atril[i]!=null){
+                if(atril[i] instanceof Comodin) sum+=30;
+                else sum+=atril[i].getNum();
+            }
+        }
+        return sum;
+    }
+
     public Ficha fichaIndex(int index){
         return atril[index];
+    }
+
+    public Soporte copiar(){
+        Soporte s = new Soporte();
+        for(int i = 1; i < 107; i++){
+            if(atril[i] != null){s.insertar(atril[i]);}
+        }
+        s.setCantidad(getCantidad());
+        return s;
+    }
+
+    public void reemplazar(Soporte r){
+        vaciar();
+        for(int i = 0; i < r.getCantidad(); i++){
+            insertar(r.consultarFicha(i));
+        }
+        setCantidad(r.getCantidad());
     }
 
 }

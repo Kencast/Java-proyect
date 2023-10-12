@@ -1,36 +1,48 @@
 package com.mycompany.proyecto1;
 
-import java.util.ArrayList;
-
 public class Mesa {
-    private ArrayList<Combinaciones> grupos;
-    
+    private Ficha arrayMesa[];
+
     public Mesa(){
-        setGrupos();
+        setArrayMesa();
+        vaciar();
     }
-    
-    private void setGrupos(){
-        grupos = new ArrayList<Combinaciones>();
+
+    private void setArrayMesa(){
+        this.arrayMesa = new Ficha[128];
     }
-    
-    public boolean verificarGrupos(){
-        for(int i = 0; i < getTamaño(); i++){
-            if(!(grupos.get(i).verificar())) {return false;}
+
+    public void insertarFicha(Ficha f, int pos){
+        arrayMesa[pos] = f;
+    }
+
+    public void sacarFicha(int pos){
+        arrayMesa[pos] = null;
+    }
+
+    public Ficha obtenerFicha(int pos){
+        return arrayMesa[pos];
+    }
+
+    private void vaciar(){
+        for(int i = 0; i < 128; i++){
+            arrayMesa[i] = null;
         }
-        return true;
     }
 
-    public void generargrupo(Ficha ficha){ //(Joshua) para el antepenúltimo método de la clase jugador
-        //grupos.add(ficha);
-    }
-
-    public Combinaciones sacargrupo(int index){ //(Joshua) para el penúltimo método de la clase jugador
-        return grupos.get(index);
-    }
-
-    public int getTamaño(){
-        return grupos.size();
+    public Mesa copiar(){
+        Mesa m = new Mesa();
+        for(int i = 0; i < 128; i++){
+            m.insertarFicha(obtenerFicha(i),i);
+        }
+        return m;
     }
     
-    
+    public void reemplazar(Mesa m){
+        vaciar();
+        for(int i = 0; i < 128; i++){
+            arrayMesa[i] = m.obtenerFicha(i);
+        }
+    }
+
 }

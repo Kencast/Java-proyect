@@ -6,6 +6,7 @@ public class Partida {
     private int turnoActual; //número del jugador para el turno
     private Mesa tablero;
     private Baraja fichas;
+    private Mesa copia;
 
     public Partida(){
         fichas=new Baraja();
@@ -40,31 +41,22 @@ public class Partida {
 
     public void siguienteRonda(){
         aumentarRonda();
-        setTurnoActual(1);
+        setTurnoActual(0);
+        resetear();
     }
 
     private void aumentarTurno(){
         if(turnoActual>4) setTurnoActual(1); //empieza de nuevo
         else turnoActual++;
     }
-    private void cambiarTurno(){ //pasa al turno del siguiente jugador
+    public void cambiarTurno(){ //pasa al turno del siguiente jugador
         aumentarTurno();
-        int index=getTurnoActual();
-        turno(jugadores[index]);
     }
     private void verificarJugadas(Jugador actual){ //boolean
         //verificar las jugadas de la mesa
         //retornar false si están mal o true en caso contrario
     }
 
-    public void siguienteTurno(Jugador actual){//evalua si se puede pasar de turno
-
-    }
-
-    public void turno(Jugador jugador){ //clase incompleta 
-        int fichasInicial=jugador.cantFichas(); //donde seteó la cantidad de fichas?
-
-    }
 
     public void comerFicha(Jugador actual, int fichasInicial){//comer ficha de baraja
         if(actual.cantFichas()==fichasInicial){//verifica que no haya jugado ninguna ficha
@@ -75,5 +67,46 @@ public class Partida {
 
     public Jugador actualJugador(){
         return jugadores[getTurnoActual()];
+    }
+
+    public Ficha obtenerFichaTablero(int pos){
+        return tablero.obtenerFicha(pos);
+    }
+
+    public void sacarFichaTablero(int pos){
+        tablero.sacarFicha(pos);
+    }
+
+    public void insertarFichaTablero(int pos, Ficha f){
+        tablero.insertarFicha(f,pos);
+    }
+
+    public void respaldarMesa(){
+        copia = tablero.copiar();
+    }
+
+    public void calcularPuntosRonda(){
+        int totalPuntos=0, puntos;
+        for(int i=0; i<4; i++){
+            jugadores[i].sumarSoporte();
+            puntos=jugadores[i].getPuntos();
+            totalPuntos+=puntos;
+            jugadores[i].sumarPuntajeTotal(-puntos);
+        }
+        jugadores[getTurnoActual()].sumarPuntajeTotal(totalPuntos);
+    }
+
+    public void reemplazarMesa(){
+        tablero.reemplazar(copia);
+    }
+
+    public void resetear(){
+        fichas = new Baraja();
+        tablero = new Mesa();
+        for(int i = 0; i < 4; i++){
+            jugadores[i].resetearSoporte(fichas);
+            jugadores[i].setPuntos(0);
+            jugadores[i].setPuedeModificar(false);
+        }
     }
 }

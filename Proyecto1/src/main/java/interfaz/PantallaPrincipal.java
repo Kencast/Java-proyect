@@ -18,8 +18,8 @@ public class PantallaPrincipal extends JFrame {
     private Partida partida;
     private JLabel titulo;
     private JLabel subtitulo;
-    private JButton selecto = null;
-    private Ficha arrayMesa[];
+    private JButton selecto;
+    private int cantFichasInicial;
 
     public PantallaPrincipal(){
         super("Rummikub");
@@ -39,7 +39,6 @@ public class PantallaPrincipal extends JFrame {
         arrayColor[5]= new Color(100, 30, 22);
         arrayColor[6]= new Color(22, 160, 133);
         //setUndecorated(true);
-        arrayMesa = new Ficha[128];
 
         Toolkit tool=getToolkit();
         Dimension screen=tool.getScreenSize();
@@ -62,6 +61,18 @@ public class PantallaPrincipal extends JFrame {
         pantalla.add(titulo);
         pantalla.add(subtitulo);
 
+        JButton boton=new JButton("Siguiente jugador");
+        boton.setFont(new Font("Symbol", Font.BOLD, 16));
+        boton.setBackground(Color.WHITE);
+        boton.setBounds(x*9-60, 10, 200, 30);
+        boton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                siguienteTurno();
+            }
+        });
+        pantalla.add(boton);
+
         soporte.setBackground(arrayColor[5]);
         soporte.setBounds(x*2, y*8-50, x*6, y*2);
         add(pantalla, BorderLayout.CENTER);
@@ -77,9 +88,53 @@ public class PantallaPrincipal extends JFrame {
         titulo.setText("Ronda "+partida.getRondas());
         subtitulo.setText("Jugador "+(partida.getTurnoActual()+1));
         Jugador j=partida.actualJugador();
+        selecto=null;
+        j.respaldarSoporte();
+        partida.respaldarMesa();
+        guardarFichasInicial(j.cantFichas());
         modificarBotonesSoporte(j);
+        modificarBotonesMesa();
     }
 
+    private void guardarFichasInicial(int cant){
+        cantFichasInicial=cant;
+    }
+    private int fichasIniciales(){return cantFichasInicial;}
+
+    private void mostrarMensaje(String mensaje){
+        JOptionPane.showMessageDialog(this, mensaje);
+    }
+
+    private void ganador(){
+        mostrarMensaje("El jugador #"+(partida.getTurnoActual()+1)+" ganó");
+        partida.calcularPuntosRonda();
+        partida.siguienteRonda();
+        inicioTurno();
+    }
+
+    private void siguienteTurno(){
+        Jugador jug=partida.actualJugador();
+        if(jug.cantFichas()<fichasIniciales()){
+            if(!verificarMesa()){
+                mostrarMensaje("La jugada es incorrecta");
+                restaurarJuego(jug);
+                return;
+            }
+            if(!jug.isPuedeModificar() && jug.getPuntos()<30){
+                mostrarMensaje("La primera jugada tiene que sumar mínimo 30 puntos");
+                restaurarJuego(jug);
+                return;
+            }
+            if(jug.cantFichas()==0){
+                ganador();
+                return;
+            }
+            jug.setPuedeModificar(true);
+            partida.cambiarTurno();
+            inicioTurno();
+        }
+
+    }
     private void botonesMesa(){
         Font letra=new Font("Symbol", Font.BOLD, 14);
         JButton b;
@@ -121,19 +176,22 @@ public class PantallaPrincipal extends JFrame {
                             Ficha f = j.pedirFichaSoporte(index);
                             j.sacarFicha(index);
                             selecto = null;
-                            arrayMesa[pos] = f;
+                            partida.insertarFichaTablero(pos,f);
                             modificarBotonesSoporte(j);
                         }else{
                             int posS = (int) selecto.getClientProperty("posicion");
-                            arrayMesa[pos] = arrayMesa[posS];
-                            arrayMesa[posS] = null;
+                            partida.insertarFichaTablero(pos,partida.obtenerFichaTablero(posS));
+                            partida.sacarFichaTablero(posS);
                             selecto.setBackground(arrayColor[5]);
-                            selecto.setText(" ");
+                            selecto.setText("");
                             selecto.setIcon(null);
+                            selecto=null;
                         }
-                    }else if(j.isPuedeModificar() || turno==partida.getTurnoActual()){
-                        selecto = p;
-                        selecto.putClientProperty("place", 1); //Significa que esta en la mesa
+                    }else if(p.getBackground()!=arrayColor[5]){
+                        if(j.isPuedeModificar() || turno==partida.getTurnoActual()) {
+                            selecto = p;
+                            selecto.putClientProperty("place", 1); //Significa que esta en la mesa
+                        }
                     }
                 }
             });
@@ -162,8 +220,7 @@ public class PantallaPrincipal extends JFrame {
                             selecto.putClientProperty("place", 2); //Significa que está en el soporte
                         }
                     }
-                    else{
-                        if(selecto==null) return;
+                    else if(selecto!=null){
                         int turno = (int) selecto.getClientProperty("turno");
                         if(turno == partida.getTurnoActual()){
                             p.setText(selecto.getText());
@@ -174,7 +231,9 @@ public class PantallaPrincipal extends JFrame {
                             selecto.setIcon(null);
                             int pos = (int) selecto.getClientProperty("posicion");
                             Jugador j = partida.actualJugador();
-                            j.regresarFichaSoporte(arrayMesa[pos]);
+                            j.regresarFichaSoporte(partida.obtenerFichaTablero(pos));
+                            partida.sacarFichaTablero(pos);
+                            selecto=null;
                             modificarBotonesSoporte(j);
                         }
                     }
@@ -200,15 +259,16 @@ public class PantallaPrincipal extends JFrame {
             else{
                 b.setBackground(arrayColor[f.getColor()]);
                 b.setText("" + f.getNum());
+                b.setIcon(null);
                 b.putClientProperty("Indice", f.getIndex());
             }
             b.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
         }
-        limpiarExceso(i);
+        limpiarExcesoSoporte(i);
         soporte.repaint();
     }
 
-    private void limpiarExceso(int i){ //
+    private void limpiarExcesoSoporte(int i){
         for(int j = i; j < 30; j++){
             JButton b = (JButton) soporte.getComponent(j);
             b.setBackground(arrayColor[5]);
@@ -216,6 +276,17 @@ public class PantallaPrincipal extends JFrame {
             b.setText("");
             b.setIcon(null);
         }
+    }
+
+    private void limpiarExcesoMesa(){
+        for(int i = 0; i < 128; i++){
+            JButton b = (JButton) mesa.getComponent(i);
+            b.setBackground(arrayColor[5]);
+            b.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
+            b.setText("");
+            b.setIcon(null);
+        }
+        mesa.repaint();
     }
 
     private boolean verificarMesa(){
@@ -228,20 +299,39 @@ public class PantallaPrincipal extends JFrame {
                    else return false;
                }
            }else{
-               if(b.getBackground() == arrayColor[4]){
-                   Ficha f = new Comodin();
-                   grupo.insertar(f);
-               }else{
-                   int color = 3;
-                   if(b.getBackground() == arrayColor[0]){color = 0;}
-                   if(b.getBackground() == arrayColor[1]){color = 1;}
-                   if(b.getBackground() == arrayColor[2]){color = 2;}
-                  int num = Integer.parseInt(b.getText());
-                   Ficha f = new FichaNormal(num,color);
-                   grupo.insertar(f);
-               }
+               Ficha f = partida.obtenerFichaTablero(i);
+               grupo.insertar(f);
            }
         }
         return true;
+    }
+
+    private void modificarBotonesMesa(){
+        for(int i = 0; i < 128; i++){
+            if(partida.obtenerFichaTablero(i) != null){
+                Ficha f = partida.obtenerFichaTablero(i);
+                JButton b = (JButton) mesa.getComponent(i);
+                if(f instanceof Comodin){
+                    b.setText("");
+                    b.setBackground(arrayColor[4]);
+                    ImageIcon icono = new ImageIcon(getClass().getResource("imagenComodin.png"));
+                    b.setIcon(icono);
+                }else{
+                    b.setText("" + f.getNum());
+                    b.setBackground(arrayColor[f.getColor()]);
+                }
+                b.putClientProperty("Indice",f.getIndex());
+            }
+        }
+        mesa.repaint();
+    }
+
+    private void restaurarJuego(Jugador j){
+        partida.reemplazarMesa();
+        j.reemplazarSoporte();
+        selecto=null;
+        modificarBotonesSoporte(j);
+        limpiarExcesoMesa();
+        modificarBotonesMesa();
     }
 }
