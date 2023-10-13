@@ -2,7 +2,7 @@ package com.mycompany.proyecto1;
 /**
  *
  * @author kencast
- * @author Tupadre
+ * @author tuPadre
  */
 public class Jugador {
     private Soporte atril;
@@ -58,7 +58,9 @@ public class Jugador {
     public void sacarFicha(int index){ //Saca ficha 'i' del soporte
         Ficha elegida=atril.obtenerFicha(index);
         atril.sacar(index);
-        puntos+=elegida.getNum();
+        if(!(elegida instanceof Comodin)){
+            puntos+=elegida.getNum();
+        }
     }
 
     public Ficha consultarFichaSoporte(int pos){
@@ -70,7 +72,7 @@ public class Jugador {
     }
 
     public void regresarFichaSoporte(Ficha f){
-        setPuntos(getPuntos()-f.getNum());
+        if(!(f instanceof Comodin)) setPuntos(getPuntos()-f.getNum());
         atril.insertar(f);
     }
 
@@ -79,7 +81,8 @@ public class Jugador {
     }
 
     public void sumarSoporte(){
-        puntos=atril.sumarpuntosoporte();
+        setPuntos(0);
+        puntos=atril.sumarPuntoSoporte();
     }
 
     public void reemplazarSoporte(){

@@ -73,6 +73,30 @@ public class PantallaPrincipal extends JFrame {
         });
         pantalla.add(boton);
 
+        JButton comer=new JButton("Tomar ficha");
+        comer.setFont(new Font("Symbol", Font.BOLD, 16));
+        comer.setBackground(Color.WHITE);
+        comer.setBounds(10, y*8, 200, 30);
+        comer.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Jugador actual=partida.actualJugador();
+                if(fichasIniciales()==actual.cantFichas()) {
+                    if(partida.existenFichas()){
+                        sinFichas();
+                        return;
+                    }
+                    partida.comerFicha();
+                    partida.reemplazarMesa();
+                    limpiarExcesoMesa();
+                    partida.cambiarTurno();
+                    inicioTurno();
+                }
+                else mostrarMensaje("No puede tomar ficha: ya jugó una ficha de su soporte");
+            }
+        });
+        pantalla.add(comer);
+
         soporte.setBackground(arrayColor[5]);
         soporte.setBounds(x*2, y*8-50, x*6, y*2);
         add(pantalla, BorderLayout.CENTER);
@@ -112,6 +136,13 @@ public class PantallaPrincipal extends JFrame {
         inicioTurno();
     }
 
+    private void sinFichas(){
+        int jugadorGan= partida.jugadorGanador();
+        mostrarMensaje("Se terminaron las fichas: El jugador #" +jugadorGan+" ganó");
+        partida.siguienteRonda();
+        inicioTurno();
+    }
+
     private void siguienteTurno(){
         Jugador jug=partida.actualJugador();
         if(jug.cantFichas()<fichasIniciales()){
@@ -143,7 +174,8 @@ public class PantallaPrincipal extends JFrame {
             b.setBackground(arrayColor[5]);
             b.setFont(letra);
             b.putClientProperty("posicion",i);
-            b.putClientProperty("turno", 0);
+            b.putClientProperty("place", 1);
+            b.putClientProperty("turno", -1);
             b.setForeground(Color.WHITE);
             b.addActionListener(new ActionListener(){
                 @Override
@@ -152,23 +184,22 @@ public class PantallaPrincipal extends JFrame {
                     Jugador j = partida.actualJugador();
                     int turno=(int)p.getClientProperty("turno");
                     if (p.getBackground() == arrayColor[5] && selecto != null) {
-                        if(!partida.actualJugador().isPuedeModificar()){
+                        if(!j.isPuedeModificar()){
                             int pos = (int) p.getClientProperty("posicion");
                             if(pos % 16 != 0){
                                 JButton ant = (JButton) mesa.getComponent(pos-1);
                                 int turnoAnt = (int) ant.getClientProperty("turno");
-                                if(ant.getBackground() != arrayColor[5] && turnoAnt != partida.getTurnoActual()){return;}
+                                if(ant.getBackground() != arrayColor[5] && turnoAnt != partida.turnoReal()){return;}
                             }
                             if((pos+1) % 16 != 0 && pos != 127){
                                 JButton sig = (JButton) mesa.getComponent(pos+1);
                                 int turnoSig = (int) sig.getClientProperty("turno");
-                                if(sig.getBackground() != arrayColor[5] && turnoSig != partida.getTurnoActual()){return;}
+                                if(sig.getBackground() != arrayColor[5] && turnoSig != partida.turnoReal()){return;}
                             }
                         }
                         p.setBackground(selecto.getBackground());
                         p.setText(selecto.getText());
                         p.setIcon(selecto.getIcon());
-                        p.putClientProperty("turno",partida.getTurnoActual());
                         int pos = (int) p.getClientProperty("posicion");
                         int place = (int) selecto.getClientProperty("place");
                         if(place == 2){
@@ -176,21 +207,24 @@ public class PantallaPrincipal extends JFrame {
                             Ficha f = j.pedirFichaSoporte(index);
                             j.sacarFicha(index);
                             selecto = null;
+                            p.putClientProperty("turno", partida.turnoReal());
                             partida.insertarFichaTablero(pos,f);
                             modificarBotonesSoporte(j);
                         }else{
                             int posS = (int) selecto.getClientProperty("posicion");
                             partida.insertarFichaTablero(pos,partida.obtenerFichaTablero(posS));
                             partida.sacarFichaTablero(posS);
+                            p.putClientProperty("turno", selecto.getClientProperty("turno"));
                             selecto.setBackground(arrayColor[5]);
+                            selecto.putClientProperty("turno", -1);
                             selecto.setText("");
                             selecto.setIcon(null);
                             selecto=null;
                         }
                     }else if(p.getBackground()!=arrayColor[5]){
-                        if(j.isPuedeModificar() || turno==partida.getTurnoActual()) {
+                        if(j.isPuedeModificar() || turno==partida.turnoReal()) {
                             selecto = p;
-                            selecto.putClientProperty("place", 1); //Significa que esta en la mesa
+                            selecto.putClientProperty("place", 1); //Significa que está en la mesa
                         }
                     }
                 }
@@ -207,6 +241,7 @@ public class PantallaPrincipal extends JFrame {
             b.setFont(new Font("Symbol", Font.BOLD, 15));
             b.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
             b.setForeground(Color.WHITE);
+            b.putClientProperty("place", 2);
             b.addActionListener(new ActionListener(){
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -222,20 +257,21 @@ public class PantallaPrincipal extends JFrame {
                     }
                     else if(selecto!=null){
                         int turno = (int) selecto.getClientProperty("turno");
-                        if(turno == partida.getTurnoActual()){
-                            p.setText(selecto.getText());
-                            p.setBackground(selecto.getBackground());
-                            p.setIcon(selecto.getIcon());
-                            selecto.setText("");
-                            selecto.setBackground(arrayColor[5]);
-                            selecto.setIcon(null);
-                            int pos = (int) selecto.getClientProperty("posicion");
-                            Jugador j = partida.actualJugador();
-                            j.regresarFichaSoporte(partida.obtenerFichaTablero(pos));
-                            partida.sacarFichaTablero(pos);
-                            selecto=null;
-                            modificarBotonesSoporte(j);
-                        }
+                        int lugar=(int) selecto.getClientProperty("place");
+                        if(turno < partida.turnoReal() || lugar==2) return;
+                        p.setText(selecto.getText());
+                        p.setBackground(selecto.getBackground());
+                        p.setIcon(selecto.getIcon());
+                        selecto.setText("");
+                        selecto.putClientProperty("turno", -1);
+                        selecto.setBackground(arrayColor[5]);
+                        selecto.setIcon(null);
+                        int pos = (int) selecto.getClientProperty("posicion");
+                        Jugador j = partida.actualJugador();
+                        j.regresarFichaSoporte(partida.obtenerFichaTablero(pos));
+                        partida.sacarFichaTablero(pos);
+                        selecto=null;
+                        modificarBotonesSoporte(j);
                     }
                 }
             });
@@ -263,6 +299,7 @@ public class PantallaPrincipal extends JFrame {
                 b.putClientProperty("Indice", f.getIndex());
             }
             b.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
+            b.putClientProperty("turno", partida.turnoReal());
         }
         limpiarExcesoSoporte(i);
         soporte.repaint();
@@ -274,6 +311,7 @@ public class PantallaPrincipal extends JFrame {
             b.setBackground(arrayColor[5]);
             b.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
             b.setText("");
+            b.putClientProperty("turno", -1);
             b.setIcon(null);
         }
     }
@@ -294,11 +332,17 @@ public class PantallaPrincipal extends JFrame {
         for(int i = 0; i < 128; i++){
            JButton b = (JButton) mesa.getComponent(i);
            if(b.getBackground() == arrayColor[5]){
-               if(grupo.getTamaño() != 0){
+               if(grupo.getTamano() != 0){
                    if(grupo.verificar()){grupo = new Combinaciones();}
                    else return false;
                }
            }else{
+               if(i % 16 == 0){
+                   if(grupo.getTamano() != 0){
+                       if(grupo.verificar()){grupo = new Combinaciones();}
+                       else return false;
+                   }
+               }
                Ficha f = partida.obtenerFichaTablero(i);
                grupo.insertar(f);
            }
@@ -321,6 +365,7 @@ public class PantallaPrincipal extends JFrame {
                     b.setBackground(arrayColor[f.getColor()]);
                 }
                 b.putClientProperty("Indice",f.getIndex());
+                b.putClientProperty("place",1);
             }
         }
         mesa.repaint();
@@ -329,6 +374,7 @@ public class PantallaPrincipal extends JFrame {
     private void restaurarJuego(Jugador j){
         partida.reemplazarMesa();
         j.reemplazarSoporte();
+        j.setPuntos(0);
         selecto=null;
         modificarBotonesSoporte(j);
         limpiarExcesoMesa();

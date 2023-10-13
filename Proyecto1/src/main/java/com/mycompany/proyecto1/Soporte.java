@@ -93,6 +93,7 @@ public class Soporte {
     }
 
     public Ficha consultarFicha(int pos){
+        //Da la ficha que es la numero "pos" del soporte
         int cuenta = 0;
         for(int i = 0; i < 107; i++){
             if(atril[i] != null){
@@ -103,7 +104,8 @@ public class Soporte {
         return null;
     }
 
-    public int sumarpuntosoporte(){
+    public int sumarPuntoSoporte(){
+        //Suma los puntos del soporte
         int sum=0;
         for(int i=1;i<107;i++){
             if(atril[i]!=null){
@@ -115,10 +117,12 @@ public class Soporte {
     }
 
     public Ficha fichaIndex(int index){
+        //Devuelve la ficha en el index
         return atril[index];
     }
 
     public Soporte copiar(){
+        //Devuelve una copia del soporte
         Soporte s = new Soporte();
         for(int i = 1; i < 107; i++){
             if(atril[i] != null){s.insertar(atril[i]);}
@@ -128,6 +132,7 @@ public class Soporte {
     }
 
     public void reemplazar(Soporte r){
+        //Reemplaza el soporte actual por el soporte r
         vaciar();
         for(int i = 0; i < r.getCantidad(); i++){
             insertar(r.consultarFicha(i));
