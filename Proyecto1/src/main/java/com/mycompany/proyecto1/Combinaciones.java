@@ -35,18 +35,17 @@ public class Combinaciones {
     
     private boolean esEscalera() {
         //Verifica si el grupo es una escalera
-        int color = seleccionarColor(0);
-        for(int i = 0; i+1 < getTamano(); i++){
-            if(grupo.get(i) instanceof Comodin){
-                if(i == 0){
-                    grupo.get(i).setNum(grupo.get(1).getNum()-1);
-                }
-                else {
-                    grupo.get(i).setNum(grupo.get(i-1).getNum()+1);
-                }
-                grupo.get(i).setColor(color);
+        int cuenta = 0, flag = 0, color = 0;
+        for (int i = 0; i < getTamano(); i++) {
+            if (flag == 0 && !(grupo.get(i) instanceof Comodin)) {
+                cuenta = grupo.get(i).getNum() + 1;
+                color = grupo.get(i).getColor();
+                flag++;
+            } else {
+                if (!(grupo.get(i) instanceof Comodin) &&
+                (grupo.get(i).getNum() != cuenta || grupo.get(i).getColor() != color)) return false;
+                cuenta++;
             }
-            if(grupo.get(i).getNum() != grupo.get(i+1).getNum()-1 || color != grupo.get(i).getColor()){return false;}
         }
         return true;
     }
@@ -57,30 +56,39 @@ public class Combinaciones {
         for(int i = 0; i < 4; i++){array[i] = -1;}
         for(int i = 0; i < getTamano(); i++){
             int color = grupo.get(i).getColor();
-            if(!verificarColor(array,color)){return false;}
+            if(verificarColor(array,color)){return false;}
             array[i] = color;
         }
-        for(int i = 0; i+1 < getTamano(); i++){
-            if(grupo.get(i) instanceof Comodin){
-                if(i == 0){grupo.get(i).setNum(grupo.get(1).getNum());}
-                else {grupo.get(i).setNum(grupo.get(i-1).getNum());}
-            }
-            if(grupo.get(i).getNum() != grupo.get(i+1).getNum()){return false;}
+        int num [] = new int[getTamano()];
+        for(int i = 0; i < getTamano(); i++){
+            num[i] = grupo.get(i).getNum();
         }
-        return true;
+        return verificarArrayNum(num,seleccionarNum(0));
     }
 
     private boolean verificarColor(int array[], int color){
         //Verifica si el color dado no esta en el arreglo
         for(int j = 0; j < 4; j++){
-            if(array[j] == color && color != 4){return false;}
+            if(array[j] == color && color != 4){return true;}
         }
-        return true;
+        return false;
     }
 
     private int seleccionarColor(int num){
         //Selecciona un color para verificar la escalera
         if(!(grupo.get(num) instanceof Comodin)){return grupo.get(num).getColor();}
         return seleccionarColor(num+1);
+    }
+
+    private boolean verificarArrayNum(int array[],int num){
+        for(int i = 0; i < getTamano(); i++){
+            if(array[i] != 0 && array[i] != num) return false;
+        }
+        return true;
+    }
+
+    private int seleccionarNum(int num){
+        if(!(grupo.get(num) instanceof Comodin)) return grupo.get(num).getNum();
+        return seleccionarNum(num+1);
     }
 }

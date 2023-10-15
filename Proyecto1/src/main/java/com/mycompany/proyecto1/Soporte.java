@@ -134,8 +134,8 @@ public class Soporte {
     public void reemplazar(Soporte r){
         //Reemplaza el soporte actual por el soporte r
         vaciar();
-        for(int i = 0; i < r.getCantidad(); i++){
-            insertar(r.consultarFicha(i));
+        for(int i = 0; i < 107; i++){
+            insertar(r.obtenerFicha(i));
         }
         setCantidad(r.getCantidad());
     }

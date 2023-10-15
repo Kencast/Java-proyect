@@ -20,11 +20,11 @@ public class PantallaPrincipal extends JFrame {
     private JLabel subtitulo;
     private JButton selecto;
     private int cantFichasInicial;
+    private PantallaResultado result;
 
     public PantallaPrincipal(){
         super("Rummikub");
         partida=new Partida();
-
         mesa =new JPanel(new GridLayout(8, 16));
         soporte=new JPanel(new GridLayout(2, 15));
         pantalla=new JPanel(null);
@@ -39,6 +39,8 @@ public class PantallaPrincipal extends JFrame {
         arrayColor[5]= new Color(100, 30, 22);
         arrayColor[6]= new Color(22, 160, 133);
         //setUndecorated(true);
+
+        result=new PantallaResultado(partida);
 
         Toolkit tool=getToolkit();
         Dimension screen=tool.getScreenSize();
@@ -130,16 +132,19 @@ public class PantallaPrincipal extends JFrame {
     }
 
     private void ganador(){
-        mostrarMensaje("El jugador #"+(partida.getTurnoActual()+1)+" ganó");
+        partida.setNumGanador(partida.getTurnoActual());
         partida.calcularPuntosRonda();
+        result.mostrar();
         partida.siguienteRonda();
+        limpiarExcesoMesa();
         inicioTurno();
     }
 
     private void sinFichas(){
-        int jugadorGan= partida.jugadorGanador();
-        mostrarMensaje("Se terminaron las fichas: El jugador #" +jugadorGan+" ganó");
+        partida.jugadorGanador();
+        result.mostrar();
         partida.siguienteRonda();
+        limpiarExcesoMesa();
         inicioTurno();
     }
 
@@ -203,7 +208,7 @@ public class PantallaPrincipal extends JFrame {
                         int pos = (int) p.getClientProperty("posicion");
                         int place = (int) selecto.getClientProperty("place");
                         if(place == 2){
-                           int index = (int) selecto.getClientProperty("Indice");
+                            int index = (int) selecto.getClientProperty("Indice");
                             Ficha f = j.pedirFichaSoporte(index);
                             j.sacarFicha(index);
                             selecto = null;
@@ -322,6 +327,7 @@ public class PantallaPrincipal extends JFrame {
             b.setBackground(arrayColor[5]);
             b.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
             b.setText("");
+
             b.setIcon(null);
         }
         mesa.repaint();

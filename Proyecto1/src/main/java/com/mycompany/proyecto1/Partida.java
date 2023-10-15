@@ -7,10 +7,12 @@ public class Partida {
     private Mesa tablero;
     private Baraja fichas;
     private Mesa copia;
+    private int numGanador;
 
     public Partida(){
         fichas=new Baraja();
         jugadores=new Jugador[4];
+        setNumGanador(0);
         jugadores[0] = new Jugador(fichas);
         jugadores[1] = new Jugador(fichas);
         jugadores[2] = new Jugador(fichas);
@@ -45,7 +47,11 @@ public class Partida {
         setTurnoActual(0);
         resetear();
     }
-
+    
+    public void setNumGanador(int n){numGanador=n;}
+    
+    public int getNumGanador(){return numGanador;}
+    
     private void aumentarTurno(){
         turnoActual++; //empieza de nuevo
     }
@@ -92,10 +98,10 @@ public class Partida {
             totalPuntos+=puntos;
             jugadores[i].sumarPuntajeTotal(-puntos);
         }
-        jugadores[getTurnoActual()].sumarPuntajeTotal(totalPuntos);
+        jugadores[getNumGanador()].sumarPuntajeTotal(totalPuntos);
     }
 
-    public int jugadorGanador(){
+    public void jugadorGanador(){
         int minPuntos=10000, index=0, puntos=0;
         for(int i=0; i<4; i++){
             jugadores[i].sumarSoporte();
@@ -106,8 +112,8 @@ public class Partida {
             }
             jugadores[i].sumarPuntajeTotal(-jugadores[i].getPuntos());
         }
+        setNumGanador(index);
         jugadores[index].sumarPuntajeTotal(puntos);
-        return index;
     }
 
     public void reemplazarMesa(){
@@ -131,5 +137,24 @@ public class Partida {
         return fichas.getTamaño() == 0;
     }
 
+    public String ganadorTotal(){
+        int ganador1 = 0;
+        int ganador2 = 0;
+        for(int i = 1; i < 4; i++){
+            if(jugadores[i].getPuntajeTotal() == jugadores[ganador1].getPuntajeTotal()){
+                ganador2 = i;
+            }
+            if(jugadores[i].getPuntajeTotal() > jugadores[ganador1].getPuntajeTotal()){
+                ganador1 = i;
+                ganador2 = i;
+            } 
+        }
+        if(ganador1 == ganador2) return "El jugador " + ganador1 + " ganó";
+        return "Los jugadores " + ganador1 + " y " + ganador2 + " ganaron";
+    }
+
+    public Jugador jugadorIndex(int index){
+        return jugadores[index];
+    }
 
 }
