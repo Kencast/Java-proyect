@@ -7,6 +7,7 @@ public class Baraja {
     private ArrayList<Ficha> fichasMesa;
 
     public Baraja(){
+        //Inicializa la baraja
         generarBaraja();
     }
 

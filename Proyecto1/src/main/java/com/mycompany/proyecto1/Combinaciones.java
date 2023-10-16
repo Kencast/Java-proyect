@@ -6,6 +6,7 @@ public class Combinaciones {
     private ArrayList<Ficha> grupo;
 
     public Combinaciones(){
+        //Inicializa el objeto combinacion
         setCombinacion();
     }
  
@@ -16,7 +17,6 @@ public class Combinaciones {
     
     public void insertar(Ficha ficha){
         //Inserta una ficha al final
-        ficha.setIndex(getTamano() - 1);
         grupo.add(ficha);
     }
 
@@ -37,6 +37,7 @@ public class Combinaciones {
         //Verifica si el grupo es una escalera
         int cuenta = 0, flag = 0, color = 0;
         for (int i = 0; i < getTamano(); i++) {
+            if(cuenta > 13) return false;
             if (flag == 0 && !(grupo.get(i) instanceof Comodin)) {
                 cuenta = grupo.get(i).getNum() + 1;
                 color = grupo.get(i).getColor();
@@ -81,6 +82,7 @@ public class Combinaciones {
     }
 
     private boolean verificarArrayNum(int array[],int num){
+        //verifica que los números de la serie sean iguales
         for(int i = 0; i < getTamano(); i++){
             if(array[i] != 0 && array[i] != num) return false;
         }
@@ -88,6 +90,7 @@ public class Combinaciones {
     }
 
     private int seleccionarNum(int num){
+        //seleccionar un número que no sea de un comodín como referencia en la serie
         if(!(grupo.get(num) instanceof Comodin)) return grupo.get(num).getNum();
         return seleccionarNum(num+1);
     }

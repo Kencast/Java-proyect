@@ -5,12 +5,14 @@ public class Soporte {
     private int cantidad;
 
     public Soporte(){
+        //Inicializa el soporte vacio
         this.atril = new Ficha[107];
         vaciar();
         setCantidad(0);
     }
 
     public Soporte(Baraja mazo){
+        //Inicializa el soporte
         setCantidad(0);
         setAtril(mazo);
     }
@@ -28,11 +30,11 @@ public class Soporte {
     private void insertarEspecial(Ficha ficha){
         //Inserta comodines
         if(atril[105] != null){
-            ficha.setIndex(106);
+            ficha.settIndex(106);
             atril[106] = ficha;
         }
         else{
-            ficha.setIndex(105);
+            ficha.settIndex(105);
             atril[105] = ficha;
         }
     }
@@ -40,11 +42,11 @@ public class Soporte {
     private void insertarNormal(Ficha ficha, int pos){
         //Inserta fichas normales
         if(atril[pos] != null){
-            ficha.setIndex(pos+13);
+            ficha.settIndex(pos+13);
             atril[pos+13] = ficha;
         }
         else{
-            ficha.setIndex(pos);
+            ficha.settIndex(pos);
             atril[pos] = ficha;
         }
     }
@@ -75,16 +77,18 @@ public class Soporte {
     }
 
     public int getCantidad(){
+        //Da la cantidad de fichas en el soporte
         return cantidad;
     }
     private void setCantidad(int cantidad){
+        //Modifica la cantidad de fichas en el soporte
         this.cantidad = cantidad;
     }
 
     public void sacar(int index){
         //Saca una ficha del atril
         atril[index] = null;
-        cantidad--;
+        setCantidad(getCantidad()-1);
     }
 
     public Ficha obtenerFicha(int index){
@@ -95,7 +99,7 @@ public class Soporte {
     public Ficha consultarFicha(int pos){
         //Da la ficha que es la numero "pos" del soporte
         int cuenta = 0;
-        for(int i = 0; i < 107; i++){
+        for(int i = 1; i < 107; i++){
             if(atril[i] != null){
                 if(cuenta == pos){return atril[i];}
                 else{cuenta++;}
@@ -116,11 +120,6 @@ public class Soporte {
         return sum;
     }
 
-    public Ficha fichaIndex(int index){
-        //Devuelve la ficha en el index
-        return atril[index];
-    }
-
     public Soporte copiar(){
         //Devuelve una copia del soporte
         Soporte s = new Soporte();
@@ -134,8 +133,8 @@ public class Soporte {
     public void reemplazar(Soporte r){
         //Reemplaza el soporte actual por el soporte r
         vaciar();
-        for(int i = 0; i < 107; i++){
-            insertar(r.obtenerFicha(i));
+        for(int i = 1; i < 107; i++){
+            if(r.obtenerFicha(i) != null) insertar(r.obtenerFicha(i));
         }
         setCantidad(r.getCantidad());
     }

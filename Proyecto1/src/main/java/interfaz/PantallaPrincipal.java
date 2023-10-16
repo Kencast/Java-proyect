@@ -23,8 +23,9 @@ public class PantallaPrincipal extends JFrame {
     private PantallaResultado result;
 
     public PantallaPrincipal(){
-        super("Rummikub");
-        partida=new Partida();
+        //Inicializa los objetos
+        super("Rummikub"); //titulo de la ventana
+        partida=new Partida();  //lógica del juego
         mesa =new JPanel(new GridLayout(8, 16));
         soporte=new JPanel(new GridLayout(2, 15));
         pantalla=new JPanel(null);
@@ -38,19 +39,19 @@ public class PantallaPrincipal extends JFrame {
         arrayColor[4] = Color.WHITE;
         arrayColor[5]= new Color(100, 30, 22);
         arrayColor[6]= new Color(22, 160, 133);
-        //setUndecorated(true);
 
         result=new PantallaResultado(partida);
 
         Toolkit tool=getToolkit();
-        Dimension screen=tool.getScreenSize();
+        Dimension screen=tool.getScreenSize(); //obtener el tamaño de la pantalla
         setSize(screen);
-        int x=screen.width/10, y=screen.height/10;
+        int x=screen.width/10, y=screen.height/10; //dividirla en secciones para tener simetría
         pantalla.setBounds(0, 0, getWidth(), getHeight());
         pantalla.setBackground(arrayColor[6]);
         mesa.setBackground(arrayColor[6]);
         mesa.setBounds(x*2, y*1, x*7, y*6); //puede ser cualquier size
 
+        //Genera los titulos
         titulo=new JLabel();
         subtitulo=new JLabel();
         Font tipo=new Font("Symbol", Font.BOLD, 20);
@@ -63,11 +64,13 @@ public class PantallaPrincipal extends JFrame {
         pantalla.add(titulo);
         pantalla.add(subtitulo);
 
+        //Genera el boton para el siguiente jugador
         JButton boton=new JButton("Siguiente jugador");
         boton.setFont(new Font("Symbol", Font.BOLD, 16));
         boton.setBackground(Color.WHITE);
         boton.setBounds(x*9-60, 10, 200, 30);
         boton.addActionListener(new ActionListener() {
+            //acción del boton "Siguente jugador"
             @Override
             public void actionPerformed(ActionEvent e) {
                 siguienteTurno();
@@ -75,16 +78,18 @@ public class PantallaPrincipal extends JFrame {
         });
         pantalla.add(boton);
 
+        // Genera el boton para tomar una ficha
         JButton comer=new JButton("Tomar ficha");
         comer.setFont(new Font("Symbol", Font.BOLD, 16));
         comer.setBackground(Color.WHITE);
         comer.setBounds(10, y*8, 200, 30);
         comer.addActionListener(new ActionListener() {
+            //acción del boton
             @Override
             public void actionPerformed(ActionEvent e) {
                 Jugador actual=partida.actualJugador();
-                if(fichasIniciales()==actual.cantFichas()) {
-                    if(partida.existenFichas()){
+                if(fichasIniciales()==actual.cantFichas()) {//verifica que pueda comer
+                    if(partida.existenFichas()){ //si ya no hay fichas saca al ganador
                         sinFichas();
                         return;
                     }
@@ -111,6 +116,7 @@ public class PantallaPrincipal extends JFrame {
     }
 
     private void inicioTurno(){
+        //Genera el turno y lo inicia
         titulo.setText("Ronda "+partida.getRondas());
         subtitulo.setText("Jugador "+(partida.getTurnoActual()+1));
         Jugador j=partida.actualJugador();
@@ -123,15 +129,18 @@ public class PantallaPrincipal extends JFrame {
     }
 
     private void guardarFichasInicial(int cant){
+        //Genera una copia de la cantidad de fichas del soporte de jugador
         cantFichasInicial=cant;
     }
-    private int fichasIniciales(){return cantFichasInicial;}
+    private int fichasIniciales(){return cantFichasInicial;} //retorna las cantidad de fichas al incio del turno al soporte
 
     private void mostrarMensaje(String mensaje){
+        //Genera un JOptioPane apartir de la entrada de un string
         JOptionPane.showMessageDialog(this, mensaje);
     }
 
     private void ganador(){
+        //Llama a un frame, calcula los puntos de cada jugador y genera un turno nuevo
         partida.setNumGanador(partida.getTurnoActual());
         partida.calcularPuntosRonda();
         result.mostrar();
@@ -141,6 +150,7 @@ public class PantallaPrincipal extends JFrame {
     }
 
     private void sinFichas(){
+        //Genera un nuevo turno, los puntos y un ganador al acabarse las fichas
         partida.jugadorGanador();
         result.mostrar();
         partida.siguienteRonda();
@@ -149,6 +159,7 @@ public class PantallaPrincipal extends JFrame {
     }
 
     private void siguienteTurno(){
+        //Funcion que realiza un serie de verificaciones para revisar si puede pasar de turno
         Jugador jug=partida.actualJugador();
         if(jug.cantFichas()<fichasIniciales()){
             if(!verificarMesa()){
@@ -161,7 +172,7 @@ public class PantallaPrincipal extends JFrame {
                 restaurarJuego(jug);
                 return;
             }
-            if(jug.cantFichas()==0){
+            if(jug.cantFichas()==0){ //si el jugador se queda sin fichas gana
                 ganador();
                 return;
             }
@@ -172,6 +183,7 @@ public class PantallaPrincipal extends JFrame {
 
     }
     private void botonesMesa(){
+        //Genera los botones de la mesa
         Font letra=new Font("Symbol", Font.BOLD, 14);
         JButton b;
         for(int i=0; i<128; i++){
@@ -183,6 +195,7 @@ public class PantallaPrincipal extends JFrame {
             b.putClientProperty("turno", -1);
             b.setForeground(Color.WHITE);
             b.addActionListener(new ActionListener(){
+                // Serie de funciones en caso del boton ser presionado
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     JButton p = (JButton) e.getSource();
@@ -210,6 +223,10 @@ public class PantallaPrincipal extends JFrame {
                         if(place == 2){
                             int index = (int) selecto.getClientProperty("Indice");
                             Ficha f = j.pedirFichaSoporte(index);
+                            if(f == null){
+                                index += 13;
+                                f = j.pedirFichaSoporte(index);
+                            }
                             j.sacarFicha(index);
                             selecto = null;
                             p.putClientProperty("turno", partida.turnoReal());
@@ -240,6 +257,7 @@ public class PantallaPrincipal extends JFrame {
     }
 
     private void botonesSoporte(){
+        //Genera los botones del soporte
         for(int i = 0; i<30; i++){
             JButton b = new JButton("");
             b.setBackground(arrayColor[5]);
@@ -248,6 +266,7 @@ public class PantallaPrincipal extends JFrame {
             b.setForeground(Color.WHITE);
             b.putClientProperty("place", 2);
             b.addActionListener(new ActionListener(){
+                //Serie de funciones y validaciones en caso de presionar un boton
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     JButton p= (JButton) e.getSource();
@@ -286,42 +305,44 @@ public class PantallaPrincipal extends JFrame {
     }
 
     private void modificarBotonesSoporte(Jugador player){
-        int i;
+        //Cambia los botones del soporte de acuerdo con el soporte del jugador
+        limpiarExcesoSoporte();
         JButton b;
-        for(i = 0; i < player.cantFichas(); i++){
+        for(int i = 0; i < player.cantFichas(); i++){
             Ficha f = player.consultarFichaSoporte(i);
             b=(JButton) soporte.getComponent(i);
             if(f instanceof Comodin){
                 b.setBackground(Color.WHITE);
                 ImageIcon icono = new ImageIcon(getClass().getResource("imagenComodin.png"));
                 b.setIcon(icono);
-                b.putClientProperty("Indice", f.getIndex());
             }
             else{
                 b.setBackground(arrayColor[f.getColor()]);
                 b.setText("" + f.getNum());
                 b.setIcon(null);
-                b.putClientProperty("Indice", f.getIndex());
             }
+            b.putClientProperty("Indice", f.getIndex());
             b.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
             b.putClientProperty("turno", partida.turnoReal());
         }
-        limpiarExcesoSoporte(i);
         soporte.repaint();
     }
 
-    private void limpiarExcesoSoporte(int i){
-        for(int j = i; j < 30; j++){
+    private void limpiarExcesoSoporte(){
+        //Limpia los botones del soporte
+        for(int j = 0; j < 30; j++){
             JButton b = (JButton) soporte.getComponent(j);
             b.setBackground(arrayColor[5]);
             b.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
             b.setText("");
             b.putClientProperty("turno", -1);
             b.setIcon(null);
+            b.putClientProperty("Indice",null);
         }
     }
 
     private void limpiarExcesoMesa(){
+        //Limpia los botones de la mesa
         for(int i = 0; i < 128; i++){
             JButton b = (JButton) mesa.getComponent(i);
             b.setBackground(arrayColor[5]);
@@ -334,6 +355,7 @@ public class PantallaPrincipal extends JFrame {
     }
 
     private boolean verificarMesa(){
+        //Genera los grupo y verifica si son jugadas legales
         Combinaciones grupo = new Combinaciones();
         for(int i = 0; i < 128; i++){
            JButton b = (JButton) mesa.getComponent(i);
@@ -357,6 +379,7 @@ public class PantallaPrincipal extends JFrame {
     }
 
     private void modificarBotonesMesa(){
+        //Actualiza los botones de la mesa
         for(int i = 0; i < 128; i++){
             if(partida.obtenerFichaTablero(i) != null){
                 Ficha f = partida.obtenerFichaTablero(i);
@@ -378,6 +401,7 @@ public class PantallaPrincipal extends JFrame {
     }
 
     private void restaurarJuego(Jugador j){
+        //En caso de una jugada ilegal, se hace un rollback
         partida.reemplazarMesa();
         j.reemplazarSoporte();
         j.setPuntos(0);

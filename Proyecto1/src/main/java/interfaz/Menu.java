@@ -17,12 +17,14 @@ public class Menu extends JFrame{
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         empezarPartidaButton.addActionListener(new ActionListener() {
+            //empieza la partida
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 mostrarPartida();
             }
         });
         salirBoton.addActionListener(new ActionListener() {
+            //termina el programa
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.exit(0);
@@ -31,6 +33,7 @@ public class Menu extends JFrame{
     }
 
     private void mostrarPartida(){
+        //crea la siguiente ventana y la muestra
         PantallaPrincipal p = new PantallaPrincipal();
         p.setVisible(true);
         dispose();

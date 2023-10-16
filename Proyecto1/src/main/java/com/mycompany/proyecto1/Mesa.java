@@ -4,6 +4,7 @@ public class Mesa {
     private Ficha arrayMesa[];
 
     public Mesa(){
+        //Inicializa el objeto mesa
         setArrayMesa();
         vaciar();
     }
