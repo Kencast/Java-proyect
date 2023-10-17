@@ -54,7 +54,7 @@ public class PantallaPrincipal extends JFrame {
         //Genera los titulos
         titulo=new JLabel();
         subtitulo=new JLabel();
-        Font tipo=new Font("Symbol", Font.BOLD, 20);
+        Font tipo=new Font("Arial", Font.BOLD, 20);
         titulo.setBounds(x*5, 5, 100, 25);
         titulo.setFont(tipo);
         titulo.setForeground(Color.BLACK);
@@ -66,7 +66,7 @@ public class PantallaPrincipal extends JFrame {
 
         //Genera el boton para el siguiente jugador
         JButton boton=new JButton("Siguiente jugador");
-        boton.setFont(new Font("Symbol", Font.BOLD, 16));
+        boton.setFont(new Font("Arial", Font.BOLD, 16));
         boton.setBackground(Color.WHITE);
         boton.setBounds(x*9-60, 10, 200, 30);
         boton.addActionListener(new ActionListener() {
@@ -80,7 +80,7 @@ public class PantallaPrincipal extends JFrame {
 
         // Genera el boton para tomar una ficha
         JButton comer=new JButton("Tomar ficha");
-        comer.setFont(new Font("Symbol", Font.BOLD, 16));
+        comer.setFont(new Font("Arial", Font.BOLD, 16));
         comer.setBackground(Color.WHITE);
         comer.setBounds(10, y*8, 200, 30);
         comer.addActionListener(new ActionListener() {
@@ -261,7 +261,7 @@ public class PantallaPrincipal extends JFrame {
         for(int i = 0; i<30; i++){
             JButton b = new JButton("");
             b.setBackground(arrayColor[5]);
-            b.setFont(new Font("Symbol", Font.BOLD, 15));
+            b.setFont(new Font("Arial", Font.BOLD, 15));
             b.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
             b.setForeground(Color.WHITE);
             b.putClientProperty("place", 2);

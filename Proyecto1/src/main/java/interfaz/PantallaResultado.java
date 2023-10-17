@@ -44,7 +44,7 @@ public class PantallaResultado extends JFrame{
 
         //Genera el titulo
         JLabel titulo=new JLabel("Resultados");
-        Font tipo=new Font("Symbol", Font.BOLD, 20);
+        Font tipo=new Font("Arial", Font.BOLD, 20);
         titulo.setBounds(x*3, 5, 150, 25);
         titulo.setFont(tipo);
         titulo.setForeground(Color.RED);
@@ -52,7 +52,7 @@ public class PantallaResultado extends JFrame{
 
         //Genera el boton para salir
         JButton salir=new JButton("Salir");
-        salir.setFont(new Font("Symbol", Font.BOLD, 16));
+        salir.setFont(new Font("Arial", Font.BOLD, 16));
         salir.setBackground(Color.WHITE);
         salir.setBounds(40, 10, 200, 30);
         salir.addActionListener(new ActionListener() {
@@ -67,7 +67,7 @@ public class PantallaResultado extends JFrame{
 
         //Genera el boton para seguir jugando
         JButton jugar =new JButton("Jugar otra ronda");
-            jugar.setFont(new Font("Symbol", Font.BOLD, 16));
+            jugar.setFont(new Font("Arial", Font.BOLD, 16));
             jugar.setBackground(Color.WHITE);
             jugar.setBounds(x*5, 10, 200, 30);
             jugar.addActionListener(new ActionListener() {
@@ -94,7 +94,7 @@ public class PantallaResultado extends JFrame{
         for(int i = 0; i < 15; i++){
             JLabel t = new JLabel();
             t.setBackground(color);
-            t.setFont(new Font("Symbol", Font.BOLD, 17));
+            t.setFont(new Font("Arial", Font.BOLD, 17));
             t.setForeground(Color.WHITE);
             results.add(t);
         }
