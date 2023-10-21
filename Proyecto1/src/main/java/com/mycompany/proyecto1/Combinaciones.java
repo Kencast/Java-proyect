@@ -2,29 +2,51 @@ package com.mycompany.proyecto1;
 
 import java.util.ArrayList;
 
+/**
+* @Description Clase que guarda y verifica un escalera o serie
+*/
+
 public class Combinaciones {
     private ArrayList<Ficha> grupo;
 
+    /**
+    * @Description Constructor de la clase
+    */
     public Combinaciones(){
         //Inicializa el objeto combinacion
         setCombinacion();
     }
- 
+
+    /**
+    * @Description Inicializa la lista
+    */
     private void setCombinacion(){
         //Inicializa una serie
         grupo = new ArrayList<Ficha>();
     }
-    
+
+    /**
+    * @Description Inserta una ficha en el grupo
+    * @param ficha Ficha
+    */
     public void insertar(Ficha ficha){
         //Inserta una ficha al final
         grupo.add(ficha);
     }
 
+    /**
+    * @Description Regresa el tamaño del grupo
+    * @return tamaño del grupo
+    */
     public int getTamano(){
         //Retorna el tamaño del grupo
         return grupo.size();
     }        
-    
+
+    /**
+    * @Description Verifica si el tamaño y el grupo es legal
+    * @return booleano
+    */
     public boolean verificar(){
         //Verifica si el tamaño del grupo es correcto y verifica si es una correcta escalera o serie
         if(getTamano() < 3) {return false;}
@@ -32,7 +54,11 @@ public class Combinaciones {
         if(getTamano() > 4){return false;}
         return esSerie();
     }
-    
+
+    /**
+    * @Description Verificar si es una escalera
+    * @return booleano
+    */
     private boolean esEscalera() {
         //Verifica si el grupo es una escalera
         int cuenta = 0, flag = 0, color = 0;
@@ -51,6 +77,10 @@ public class Combinaciones {
         return true;
     }
 
+    /**
+    * @Description Verificar si es una serie valida
+    * @return booleano
+    */
     private boolean esSerie() {
         // Verifica si el grupo es una serie
         int array [] = new int[4];
@@ -67,6 +97,12 @@ public class Combinaciones {
         return verificarArrayNum(num,seleccionarNum(0));
     }
 
+    /**
+    * @Description Verifica que un color no este en el arreglo de colores
+    * @param array arreglo con los colores del grupo
+    * @param color color a verificar
+    * @return booleano
+    */
     private boolean verificarColor(int array[], int color){
         //Verifica si el color dado no esta en el arreglo
         for(int j = 0; j < 4; j++){
@@ -75,12 +111,23 @@ public class Combinaciones {
         return false;
     }
 
+    /**
+    * @Description Elije un color para verificar la escalera
+    * @param num indice de una ficha
+    * @return color
+    */
     private int seleccionarColor(int num){
         //Selecciona un color para verificar la escalera
         if(!(grupo.get(num) instanceof Comodin)){return grupo.get(num).getColor();}
         return seleccionarColor(num+1);
     }
 
+    /**
+    * @Description Verificar que los numeros sean iguales
+    * @param array arreglo de los numeros
+    * @param num numero de comparacion
+    * @return booleano
+    */
     private boolean verificarArrayNum(int array[],int num){
         //verifica que los números de la serie sean iguales
         for(int i = 0; i < getTamano(); i++){
@@ -89,6 +136,10 @@ public class Combinaciones {
         return true;
     }
 
+    /**
+    * @Description Seleccionar un numero para tomarlo como comparador
+    * @return numero del grupo
+    */
     private int seleccionarNum(int num){
         //seleccionar un número que no sea de un comodín como referencia en la serie
         if(!(grupo.get(num) instanceof Comodin)) return grupo.get(num).getNum();
