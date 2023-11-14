@@ -13,6 +13,7 @@ public class Bolsa {
     }
 
     private void setBolsa(){
+        conjuntoFichas = new ArrayList<>();
         cicloGeneracional(12,'a',1);
         cicloGeneracional(12,'e',1);
         cicloGeneracional(9,'o',1);
