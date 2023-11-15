@@ -61,7 +61,8 @@ public class Bolsa {
         int n = rand.nextInt(0,tamanoBolsa());
         Ficha f = conjuntoFichas.get(n);
         sacarFicha(n);
-        return f;    }
+        return f;
+    }
 
     private void sacarFicha(int n){
         conjuntoFichas.remove(n);

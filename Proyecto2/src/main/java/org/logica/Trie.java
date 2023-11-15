@@ -23,9 +23,8 @@ public class Trie {
         //inserta un valor en el trie
         Vertex actual =  getRoot();
         for(int i = 0; i < s.length(); i++){
-            int n;
+            int n = s.charAt(i) - 'a';
             if(s.charAt(i) == 'ñ') n = 26;
-            else n = s.charAt(i) - 'a';
             if(actual.accederHijos(n) == null) actual.setPosHijos(n,s.charAt(i));
             actual = actual.accederHijos(n);
         }
