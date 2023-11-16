@@ -16,6 +16,7 @@ public class Tablero {
     private Queue<int []> cola;
     private int [] vF = {-1,1,0,0};
     private int [] vC = {0,0,-1,1};
+    private int cantidad;
 
     /**
     * @Description Constructor
@@ -23,6 +24,7 @@ public class Tablero {
     public Tablero(){
         mesa = new Ficha [15][15];
         cola = new ArrayDeque<>();
+        setCantidad(0);
     }
 
     /**
@@ -32,6 +34,7 @@ public class Tablero {
     */
     public void colocarFicha(Ficha f, int i){
         mesa[i/15][i%15] = f;
+        setCantidad(getCantidad() + 1);
     }
 
     /**
@@ -72,7 +75,7 @@ public class Tablero {
     * @return suma o bandera de la verificacion
     */
     public int verificacionTotal(Diccionario d, int turno){
-        if(turno == 0 && mesa[7][7] == null) return -1;
+        if(mesa[7][7] == null && getCantidad() != 0) return -1;
         int suma = 0;
         for(int i = 0; i < 15; i++){
             String s = "";
@@ -226,4 +229,21 @@ public class Tablero {
     private boolean verificarCoor(int x, int y){
         return x >= 0 && x < 15 && y < 15 && y >= 0;
     }
+
+    /**
+    * @Description cambia la cantidad
+    * @param c cantidad nueva
+    */
+    public void setCantidad(int c){
+        this.cantidad = c;
+    }
+
+    /**
+    * @Description retorna la cantidad
+    * @return entero con la cantidad
+    */
+    public int getCantidad(){
+        return cantidad;
+    }
 }
+

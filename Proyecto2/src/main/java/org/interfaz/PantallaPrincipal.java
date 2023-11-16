@@ -235,10 +235,18 @@ public class PantallaPrincipal extends JFrame {
                     Jugador jug=partida.getJugadorActual();
                     if(!jug.getPuedeMover()) return;
                     if(b.getBackground()!=arrayColor[0] && selecto != null){
-                        b.setBackground(arrayColor[0]);
-                        b.setText("" + selecto.getText());
                         int indB = (int) b.getClientProperty("indice");
                         int indS = (int) selecto.getClientProperty("indice");
+                        Ficha f=jug.tomarFicha(indS);
+                        if(f instanceof Comodin){
+                            String input=JOptionPane.showInputDialog(principal, "Ingrese la letra");
+                            if(input!=null){
+                                f.setLetra(input.charAt(0));
+                            }
+                            else return;
+                        }
+                        b.setText("" + f.getLetra());
+                        b.setBackground(arrayColor[0]);
                         partida.insertarTablero(indS,indB,jug);
                         selecto.setText("");
                         selecto.setBackground(arrayColor[6]);
