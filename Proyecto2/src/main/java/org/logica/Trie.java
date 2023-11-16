@@ -1,24 +1,39 @@
 package org.logica;
 /**
-* ED para guardar el diccionario
+* @Description arbol para guardar el diccionario
 */
 public class Trie {
     private Vertex root;
 
+    /**
+    * @Description Constructor
+    */
     public Trie(){
         setRoot('!');
     }
 
+    /**
+    * @Description cambia el valor de la raiz
+    * @param a nueva letra
+    */
     public void setRoot(char a){
         //inicializa el nodo inicial del trie
         this.root = new Vertex(a);
     }
 
+    /**
+    * @Description retorna la raiz
+    * @return vertex raiz
+    */
     public Vertex getRoot(){
         //retorna el nodo inicial del trie
         return this.root;
     }
 
+    /**
+    * @Description inserta una palabra
+    * @param s string a insertar
+    */
     public void insertar(String s){
         //inserta un valor en el trie
         Vertex actual =  getRoot();
@@ -31,6 +46,11 @@ public class Trie {
         actual.setExist(true);
     }
 
+    /**
+    * @Description busca la palabra
+    * @param s string a buscar
+    * @return booleano que indica si esta la palabra
+    */
     public boolean buscar(String s){
         //busca si la palabra esta en el trie
         Vertex actual = getRoot();

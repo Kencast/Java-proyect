@@ -3,15 +3,21 @@ import java.util.*;
 import java.util.Random;
 
 /**
-*Clase para guarda la fichas
+* @Description Clase que generar la bolsa y las fichas
 */
 public class Bolsa {
     private ArrayList<Ficha> conjuntoFichas;
 
+    /**
+    * @Description Constructor
+    */
     public Bolsa(){
         setBolsa();
     }
 
+    /**
+    * @Description Genera todas las distintas fichas y las insertar en un arraylist
+    */
     private void setBolsa(){
         conjuntoFichas = new ArrayList<>();
         cicloGeneracional(12,'a',1);
@@ -45,17 +51,30 @@ public class Bolsa {
         insertarFicha(new Comodin());
     }
     
-    
+    /**
+    * @Description Inserta una ficha en la bolsa
+    * @param f Ficha a insertar
+    */
     public void insertarFicha(Ficha f){
         conjuntoFichas.add(f);
     }
 
+    /**
+    * @Description Generar un cantidad de fichas de un caracter especfico con un valor especifico
+    * @param c cantidad de fichas a crear
+    * @param a caracter de la ficha
+    * @param p valor de la ficha
+    */
     private void cicloGeneracional(int c, char a, int p){
         for(int i = 0; i < c; i++){
             insertarFicha(new FichaNormal(p,a));
         }
     }
 
+    /**
+    * @Description Se obtiene una ficha random de la bolsa y se elimina de la bolsa
+    * @return una ficha
+    */
     public Ficha tomarFicha(){
         Random rand = new Random();
         int n = rand.nextInt(0,tamanoBolsa());
@@ -64,14 +83,26 @@ public class Bolsa {
         return f;
     }
 
+    /**
+    * @Description Elimina una ficha en una posicion especifica
+    * @param n indice a eliminar
+    */
     private void sacarFicha(int n){
         conjuntoFichas.remove(n);
     }
 
+    /**
+    * @Description Tamano de la bolsa
+    * @return entero
+    */
     public int tamanoBolsa(){
         return conjuntoFichas.size();
     }
 
+    /**
+    * @Description Devuelve una ficha random de la bolsa
+    * @return Ficha random
+    */
     public Ficha sacarSinEliminar(){
         Random rand = new Random();
         int n = rand.nextInt(0,tamanoBolsa());

@@ -5,16 +5,23 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.io.FileInputStream;
 /**
-* Clase para validar palabras
+* @Description Clase que contiene las palabras validas
 */
 public class Diccionario {
     private Trie diccionary;
 
+    /**
+    * @Description Constructor
+    */
     public Diccionario(){
         diccionary = new Trie();
         generarDiccionario();
     }
 
+    /**
+    * @Description Carga el archivo, cambia las letras invalidas y crea el trie
+    * @exception Error al cargar el archivo
+    */
     private void generarDiccionario(){
         String archivo = "src/main/java/org/logica/Diccionario.txt";
         try{
@@ -46,11 +53,20 @@ public class Diccionario {
             System.out.println("Ocurrió un error al leer el archivo: " + e.getMessage());
         }
     }
-    
+
+    /**
+    * @Description inserta una palabra dentro del trie
+    * @param a String a insertar
+    */
     private void insertarDiccionary(String a){
         diccionary.insertar(a);
     }
-    
+
+    /**
+    * @Description verifica si un string esta en el trie
+    * @param a string a verificar
+    * @return Booleano para indicar si esta o no
+    */
     public boolean verificar(String a){
         return diccionary.buscar(a);
     }
