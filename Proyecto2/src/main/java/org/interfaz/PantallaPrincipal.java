@@ -80,6 +80,7 @@ public class PantallaPrincipal extends JFrame {
     private void pasarTurno(){
         Jugador jug=partida.getJugadorActual();
         titulo.setText(jug.getNombre());
+        opciones.setVisible(false);
         selecto=null;
         aux=null;
         modificarBotonesSoporte(jug);
