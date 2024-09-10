@@ -5,6 +5,7 @@ public class Main {
         Inicio start=new Inicio();
         start.setVisible(true);
     }
+
 }
 
 /*

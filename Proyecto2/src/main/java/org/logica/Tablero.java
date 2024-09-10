@@ -123,6 +123,7 @@ public class Tablero {
             limpiarCola();
             s = "";
         }
+        System.out.println(suma);
         return suma;
     }
 
